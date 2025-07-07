@@ -1,0 +1,15 @@
+[
+    {"role": "user", "content": "How many customer portfolio are present for different group of payment types in an event_store"},
+    {"role": "assistant", "content": "SELECT customer_portfolio AS customer_portfolio, payment_type as payment_type COUNT(*) AS count FROM event_store GROUP BY customer_portfolio, payment_type ;"},
+    {"role": "user", "content": "Create a heat map of fraud by time-of-day and day-of-week to optimize analyst staffing patterns for peak fraud periods."},
+    {"role": "assistant", "content": "SELECT FORMAT_TIMESTAMP('%A', TIMESTAMP_MILLIS(created_at)) AS day_of_week, EXTRACT(HOUR FROM TIMESTAMP_MILLIS(created_at)) AS hour_of_day, COUNT(*) AS fraud_count FROM event_store WHERE outcome_fraud = TRUE GROUP BY day_of_week, hour_of_day ORDER BY CASE day_of_week WHEN 'Monday' THEN 1 WHEN 'Tuesday' THEN 2 WHEN 'Wednesday' THEN 3 WHEN 'Thursday' THEN 4 WHEN 'Friday' THEN 5 WHEN 'Saturday' THEN 6 WHEN 'Sunday' THEN 7 END, hour_of_day;"},
+    {"role": "user", "content": "Show the geographic distribution of transaction origins."},
+    {"role": "assistant", "content": "SELECT sender_bank_country_code, receiver_bank_country_code, COUNT(*) AS transaction_count FROM event_store GROUP BY sender_bank_country_code, receiver_bank_country_code;"},
+    {"role": "user", "content": "Summarize the risk decisions for our transactions."},
+    {"role": "assistant", "content": "SELECT outcome_decision, outcome_risk_level, COUNT(*) AS decision_count FROM event_store GROUP BY outcome_decision, outcome_risk_level;"},
+    {"role": "user", "content": "Show the count of assignee who have updated their email id in last 1 month."},
+    {"role": "assistant", "content": "SELECT COUNT(DISTINCT a.userId) AS user_count FROM cm_event_assignee_update a JOIN UNNEST(a.ids) z JOIN event_store es ON z.identifier = es.lifecycle_id WHERE PARSE_TIMESTAMP('%Y-%m-%d',es.sender_email_chg_date) >= TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL 30 DAY);"},
+    {"role": "user", "content": "Retrieve the latest event details for each lifecycle_id from the event_store table, considering only events of type 'PAYMENT'. Ensure that each lifecycle_id has only one most recent event based on event_occured_at."},
+    {"role": "assistant", "content": "SELECT lifecycle_id, event_type, customer_id, sender_transaction_amount, sender_transaction_currency, outcome_decision, TIMESTAMP_MILLIS(created_at) AS created_time FROM ( SELECT lifecycle_id, event_type, customer_id, sender_transaction_amount, sender_transaction_currency, outcome_decision, created_at AS created_at, ROW_NUMBER() OVER(PARTITION BY lifecycle_id ORDER BY event_occurred_at DESC) AS rn FROM event_store WHERE event_type = 'PAYMENT' ) WHERE rn = 1;"}
+
+]

@@ -1,0 +1,86 @@
+{
+  "table_name": "event_store",
+  "display_name": "Event Store",
+  "description": "Stores detailed information about transactional events, device metadata, sender/receiver attributes, and outcomes used for decision-making and risk assessment.",
+  "filter_columns": [
+    "event_type",
+    "sender_transaction_currency",
+    "outcome_decision",
+    "customer_email_last_update_at",
+    "payment_type",
+    "device_type",
+    "customer_country_code",
+    "customer_segment"
+  ],
+  "aggregate_columns": [
+    "sender_transaction_amount",
+    "receiver_transaction_amount",
+    "outcome_decision_approve_score",
+    "outcome_fraud_score",
+    "customer_salary_amount",
+    "current_account_monthly_debit_amount"
+  ],
+  "sort_columns": [
+    "created_at",
+    "sender_transaction_amount",
+    "event_occurred_at",
+    "event_received_at",
+    "event_updated_at"
+  ],
+  "key_columns": [
+    "lifecycle_id",
+    "event_external_id",
+    "user_id",
+    "session_id"
+  ],
+  "join_tables": [
+    {
+      "table_name": "cm_event_assignee_update",
+      "join_condition": "event_store.lifecycle_id = cm_event_assignee_update.ids[OFFSET(0)].identifier",
+      "join_type": "LEFT JOIN"
+    },
+    {
+      "table_name": "customer_profile",
+      "join_condition": "event_store.customer_id = customer_profile.customer_id",
+      "join_type": "LEFT JOIN"
+    },
+    {
+      "table_name": "device_metadata",
+      "join_condition": "event_store.device_id = device_metadata.device_id",
+      "join_type": "LEFT JOIN"
+    }
+  ],
+  "related_business_terms": [
+    "Event",
+    "Transaction",
+    "Lifecycle",
+    "Customer",
+    "Device",
+    "Outcome",
+    "Risk Assessment"
+  ],
+  "sample_usage": [
+    {
+      "description": "List all events where the transaction amount exceeds 1000",
+      "sql":"SELECT lifecycle_id, event_type, sender_transaction_amount FROM event_store WHERE sender_transaction_amount > 1000"
+    },
+    {
+      "description":"Count events per outcome decision type",
+      "sql":"SELECT outcome_decision, COUNT(*) FROM event_store GROUP BY outcome_decision"
+    },
+    {
+      "description": "Find high-risk transactions with fraud outcome",
+      "sql": "SELECT lifecycle_id, sender_transaction_amount, outcome_fraud FROM event_store WHERE outcome_fraud = TRUE AND outcome_fraud_score > 80"
+    }
+  ],
+  "tags": [
+    "transaction",
+    "events",
+    "review",
+    "decisioning",
+    "fraud",
+    "device",
+    "customer",
+    "analytics"
+  ]
+}

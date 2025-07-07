@@ -1,0 +1,80 @@
+{
+  "table_name": "payment_attempts",
+  "display_name": "Payment Attempts",
+  "description": "Tracks all attempted payment transactions, including payment method, status, retry behavior, and error details. Useful for payment analytics, failure diagnostics, and success rate optimization.",
+  "filter_columns": [
+    "payment_status",
+    "payment_method",
+    "currency_code",
+    "failure_reason_code",
+    "retry_count",
+    "is_successful",
+    "customer_country"
+  ],
+  "aggregate_columns": [
+    "payment_amount",
+    "retry_count",
+    "processing_time_ms"
+  ],
+  "sort_columns": [
+    "attempted_at",
+    "payment_amount",
+    "retry_count",
+    "processing_time_ms"
+  ],
+  "key_columns": [
+    "payment_attempt_id",
+    "order_id",
+    "customer_id",
+    "session_id"
+  ],
+  "join_tables": [
+    {
+      "table_name": "customer_profile",
+      "join_condition": "payment_attempts.customer_id = customer_profile.customer_id",
+      "join_type": "LEFT JOIN"
+    },
+    {
+      "table_name": "orders",
+      "join_condition": "payment_attempts.order_id = orders.order_id",
+      "join_type": "LEFT JOIN"
+    },
+    {
+      "table_name": "payment_gateway_logs",
+      "join_condition": "payment_attempts.payment_attempt_id = payment_gateway_logs.attempt_id",
+      "join_type": "LEFT JOIN"
+    }
+  ],
+  "related_business_terms": [
+    "Payment",
+    "Transaction",
+    "Retry",
+    "Failure Reason",
+    "Gateway",
+    "Customer",
+    "Order"
+  ],
+  "sample_usage": [
+    {
+      "description": "Find failed payment attempts with more than 2 retries",
+      "sql": "SELECT payment_attempt_id, retry_count, failure_reason_code FROM payment_attempts WHERE is_successful = FALSE AND retry_count > 2"
+    },
+    {
+      "description": "Aggregate total payment amounts by method",
+      "sql": "SELECT payment_method, SUM(payment_amount) as total_amount FROM payment_attempts GROUP BY payment_method"
+    },
+    {
+      "description": "List successful payment attempts over $500",
+      "sql": "SELECT payment_attempt_id, customer_id, payment_amount FROM payment_attempts WHERE is_successful = TRUE AND payment_amount > 500"
+    }
+  ],
+  "tags": [
+    "payment",
+    "transaction",
+    "retry",
+    "failure",
+    "analytics",
+    "gateway",
+    "order"
+  ]
+}

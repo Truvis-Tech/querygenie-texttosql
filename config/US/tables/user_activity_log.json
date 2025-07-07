@@ -1,0 +1,79 @@
+{
+  "table_name": "user_activity_log",
+  "display_name": "User Activity Log",
+  "description": "Logs detailed user interaction data including session activity, page views, and user actions for behavioral analytics, engagement tracking, and troubleshooting.",
+  "filter_columns": [
+    "activity_type",
+    "browser_type",
+    "device_type",
+    "geo_location_country",
+    "user_segment",
+    "session_duration_category",
+    "referral_source"
+  ],
+  "aggregate_columns": [
+    "session_duration_seconds",
+    "click_count",
+    "page_view_count",
+    "form_submission_count"
+  ],
+  "sort_columns": [
+    "activity_timestamp",
+    "session_start_time",
+    "session_end_time",
+    "user_id"
+  ],
+  "key_columns": [
+    "activity_id",
+    "user_id",
+    "session_id"
+  ],
+  "join_tables": [
+    {
+      "table_name": "user_profile",
+      "join_condition": "user_activity_log.user_id = user_profile.user_id",
+      "join_type": "LEFT JOIN"
+    },
+    {
+      "table_name": "geo_ip_data",
+      "join_condition": "user_activity_log.ip_address = geo_ip_data.ip_address",
+      "join_type": "LEFT JOIN"
+    },
+    {
+      "table_name": "page_metadata",
+      "join_condition": "user_activity_log.page_id = page_metadata.page_id",
+      "join_type": "LEFT JOIN"
+    }
+  ],
+  "related_business_terms": [
+    "User Engagement",
+    "Session",
+    "Page View",
+    "Click",
+    "Behavior Analytics",
+    "User Segment"
+  ],
+  "sample_usage": [
+    {
+      "description": "Find users with more than 10 page views in a session",
+      "sql": "SELECT user_id, session_id, page_view_count FROM user_activity_log WHERE page_view_count > 10"
+    },
+    {
+      "description": "Get daily active users by country",
+      "sql": "SELECT geo_location_country, COUNT(DISTINCT user_id) AS active_users FROM user_activity_log GROUP BY geo_location_country"
+    },
+    {
+      "description": "Identify sessions with form submissions",
+      "sql": "SELECT session_id, user_id FROM user_activity_log WHERE form_submission_count > 0"
+    }
+  ],
+  "tags": [
+    "user",
+    "activity",
+    "analytics",
+    "engagement",
+    "behavior",
+    "session",
+    "tracking"
+  ]
+}

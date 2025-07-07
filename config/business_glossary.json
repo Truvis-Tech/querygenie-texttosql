@@ -1,0 +1,9 @@
+{
+    "term": "Revenue",
+    "definition": "The total amount of money generated from sales of goods or services before any expenses are deducted.",
+    "calculation": "Revenue = Price per Item × Quantity Sold",
+    "example": "If 100 units of a product priced at $20 are sold, the revenue is $2,000.",
+    "related_tables": ["orders", "invoices", "sales_summary"],
+    "tags": ["finance", "sales", "kpi"]
+}
+  

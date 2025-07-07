@@ -1,0 +1,53 @@
+POST http://localhost:8000/generate_insights
+Content-Type: application/json
+
+{
+  "market": "US",
+  "user_prompt": "Show the count of assignee who have updated their email in the last 1 month.",
+  "data": {
+    "result": [
+      {
+        "count_assignee_updated_email": 0
+      }
+    ]
+  }
+}
+
+###
+POST http://localhost:8000/execute_query
+Content-Type: application/json
+
+{
+  "query": "SELECT COUNT(DISTINCT lifecycle_id) AS count_assignee_updated_email FROM event_store WHERE customer_email_last_update_at >= UNIX_SECONDS(TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL 30 DAY))",
+  "market": "US"
+}
+
+###
+POST http://localhost:8000/generate_query
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyMiIsIm1hcmtldHMiOlsiQ0EiLCJERSIsIkpQIl0sImV4cCI6MTc0OTQ1ODU2MH0.SEUt1B3ni_gU9-wgut0mPRNWNZWev81OLfK7z0ipkPU
+
+{
+  "query": "Show the count of assignee who have updated their email in the last 1 month.",
+  "llm_type": "openai",
+  "market": "US"
+}
+
+###
+POST http://localhost:8000/fetch-data
+Content-Type: application/json
+
+{
+  "market": "US"
+}
+
+###
+POST http://localhost:8000/estimate
+Content-Type: application/json
+
+{
+  "query": "SELECT COUNT(DISTINCT lifecycle_id) AS assignee_count FROM event_store WHERE customer_email_last_update_at >= UNIX_DATE(CURRENT_DATE()) - 30",
+  "market": "US"
+}
+
+###
