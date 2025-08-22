@@ -23,6 +23,7 @@ from src.database.postgres_vector_loader import PostgresVectorLoader
 from src.services.ragQueryPipline import RAGPipeline
 from src.utils.logger import logger
 from src.database.db_config import GoogleCloudSqlUtility
+from src.services.sql_optimisation_service import SqlOptimisationService
 
 # nltk.download('punkt')
 # nltk.download('words')
@@ -243,6 +244,48 @@ def execute_query(payload: QueryPayload, user: dict = Depends(verify_token)):
             status_code=500,
             content={'result': [], 'metadata': "", 'sql_query': "", 'textual_summary': [f"BigQuery Error: {str(e)}"], 'followup_prompts': [], "x-axis": "", "typeOFgraph": ""}
         )
+
+class OptimizeSqlRequest(BaseModel):
+    market_name: str
+    llm_type: str
+    sql_query: str
+
+# @router.post("/optimize_sql_query_by_llm")
+# def optimize_sql_query_by_llm(payload: OptimizeSqlRequest, user: dict = Depends(verify_token)):
+#     username = user.get('username', 'unknown')
+#     logger.info("OPTIMIZE_SQL started - User: %s, Market: %s", username, payload.market_name)
+
+#     if os.getenv("TEST_MODE") == "true":
+#         logger.info("TEST_MODE enabled - returning mock response for optimize_sql_query_by_llm")
+#         return JSONResponse(content={"message": "Mocked response in test mode", "echo": payload.model_dump()}, status_code=200)
+
+#     try:
+#         service = SqlOptimisationService(payload.market_name, payload.llm_type)
+#         result = service.optimise_sql_query(payload.sql_query)
+#         status = 200 if isinstance(result, dict) and "error" not in result else 400
+#         return JSONResponse(status_code=status, content=result)
+#     except Exception as e:
+#         logger.exception("OPTIMIZE_SQL_ERROR - User: %s, Market: %s, Error: %s", username, payload.market_name, str(e))
+#         raise HTTPException(status_code=500, detail=f"Unexpected error: {str(e)}")
+
+@router.post("/optimize_sql_query_by_llm")
+def optimize_sql_query_by_llm(payload: OptimizeSqlRequest):
+    username = 'unknown'
+    logger.info("OPTIMIZE_SQL started - User: %s, Market: %s", username, payload.market_name)
+
+    if os.getenv("TEST_MODE") == "true":
+        logger.info("TEST_MODE enabled - returning mock response for optimize_sql_query_by_llm")
+        return JSONResponse(content={"message": "Mocked response in test mode", "echo": payload.model_dump()}, status_code=200)
+
+    try:
+        service = SqlOptimisationService(payload.market_name, payload.llm_type)
+        result = service.optimise_sql_query(payload.sql_query)
+        status = 200 if isinstance(result, dict) and "error" not in result else 400
+        return JSONResponse(status_code=status, content=result)
+    except Exception as e:
+        logger.exception("OPTIMIZE_SQL_ERROR - User: %s, Market: %s, Error: %s", username, payload.market_name, str(e))
+        raise HTTPException(status_code=500, detail=f"Unexpected error: {str(e)}")
+
 
 class MetadataRequest(BaseModel):
     metadata_type: str  # "table" or "column"
