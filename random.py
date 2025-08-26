@@ -7,3 +7,8 @@ ORDER BY table_schema, table_name, ordinal_position;
 SELECT table_schema, table_name, table_rows
 FROM information_schema.tables
 WHERE table_schema NOT IN ('mysql', 'information_schema', 'performance_schema', 'sys');
+
+{
+  "market_name": "linen-striker-454116-c9",
+  "llm_type": "gpt-4-0125-preview",
+  "sql_query": "SELECT * FROM linen-striker-454116-c9.techsteer.event_store\nWHERE \n  CASE \n    WHEN payment_status = 'COMPLETED' THEN 1 \n    ELSE 0 \n  END = 1\n  AND \n  CASE \n    WHEN sender_transaction_amount > 500 THEN 1 \n    ELSE 0 \n  END = 1"}
