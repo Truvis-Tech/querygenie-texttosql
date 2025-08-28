@@ -7,6 +7,7 @@ from src.services.bq_query_analyzer import get_query_plan_dry_run
 from src.services.llm_service import call_llm
 from src.utils.prompt_generator import generate_llm_prompt
 from src.services.bq_client import get_bigquery_client
+from src.utils.sql_parser import extract_table_columns_from_query
 
 logger = logging.getLogger(__name__)
 
@@ -47,20 +48,37 @@ class SqlOptimisationService:
                 logger.error(f"Invalid query or analysis failed: {plan_data.get('error')}")
                 return {"error": "Query is invalid or analysis failed", "details": plan_data}
 
-            # 2. Extract table and column names from the query
-            logger.info("Step 2: Extracting tables and columns from SQL...")
-            # We get the referenced tables directly from the plan data, which is more reliable.
-            referenced_tables = plan_data.get("query_metadata", {}).get("referenced_tables", [])
+            # 2. Extract table and column names from the query using sql_parser
+            logger.info("Step 2: Extracting tables and columns from SQL using sql_parser...")
+            
+            # Extract tables and columns using sql_parser
+            table_columns = extract_table_columns_from_query(sql_query)
+            
+            if not table_columns:
+                logger.warning("Could not extract any tables or columns from the query.")
+                return {"error": "Could not parse the SQL query to identify tables and columns."}
+            # Convert the table_columns dictionary to the expected format
+            referenced_tables = list(table_columns.keys())
+            # Flatten the list of columns from all tables
+            referenced_columns = [col for cols in table_columns.values() for col in cols]
+            
             if not referenced_tables:
                 logger.warning("Could not identify referenced tables.")
                 return {"error": "Could not identify tables referenced in the query."}
+            logger.info(f"Extracted {len(referenced_tables)} tables and {len(referenced_columns)} columns from the query.")
 
-            # 3. Fetch metadata for the identified tables
-            logger.info(f"Step 3: Fetching metadata for tables: {referenced_tables}")
-            table_context = self.metadata_extractor.get_metadata_for_tables(referenced_tables)
+            # 3. Fetch metadata for the identified tables with column filtering
+            logger.info(f"Step 3: Fetching metadata for tables with column filtering: {referenced_tables}")
+            
+            # Get metadata with column filtering
+            table_context = self.metadata_extractor.get_metadata_for_tables(
+                table_names=referenced_tables,
+                table_columns=table_columns
+            )
+            
             if not table_context:
-                logger.warning("Could not fetch metadata for tables.")
-                return {"error": "Failed to fetch metadata for the required tables."}
+                logger.warning("No metadata available for the specified tables and columns.")
+                return {"error": "No metadata available for the referenced tables and columns."}
 
             # 4. Generate the prompt for the LLM
             logger.info("Step 4: Generating LLM prompt...")
@@ -70,6 +88,7 @@ class SqlOptimisationService:
                 query_plan_info=plan_data,
                 model=self.llm_type
             )
+            print(prompt)
 
             # 5. Call the LLM to get optimization suggestions
             logger.info("Step 5: Calling LLM for optimization...")
@@ -77,9 +96,12 @@ class SqlOptimisationService:
             # For this example, we'll construct a minimal one.
             llm_config = {"model": self.llm_type}
             llm_response = call_llm(prompt, llm_config)
-
-            logger.info("Optimization process completed successfully.")
-            return llm_response
+            if llm_response.get("error"):
+                logger.error("LLM call failed: %s", llm_response["error"])
+                return {"error": "LLM call failed"}
+            else :
+                logger.info("Optimization process completed successfully.")
+                return llm_response
 
         except Exception as e:
             logger.exception("An unexpected error occurred during the optimization process.")
