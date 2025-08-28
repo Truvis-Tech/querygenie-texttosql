@@ -11,7 +11,6 @@ def load_llm_config(config_path: str) -> Dict[str, Any]:
     with open(config_path, "r") as f:
         return json.load(f)
 
-
 def _extract_json_block(text: str) -> Optional[Dict[str, Any]]:
     """Try to extract a ```json ... ``` block and parse it.
 
@@ -73,7 +72,7 @@ def call_llm(
             stop=stop,
         )
         d= response.model_dump()
-        print(d)
+        print("Response:",d)
         text = response.choices[0].message.content or ""
 
         parsed = _extract_json_block(text)
