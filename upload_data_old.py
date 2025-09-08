@@ -5,10 +5,10 @@ import psycopg2
 # The database name is set to 'postgres' based on your pgAdmin image.
 # Replace the user, password, host, and port with your specific details.
 db_params = {
-    "host": "192.168.1.10",
+    "host": "",
     "port": 5432,
     "user": "postgres",
-    "password": "PGTruvis@2025",
+    "password": "",
     "database": "postgres"
 }
 
