@@ -1,0 +1,32 @@
+## COLUMN AND DATATYPE SAFETY RULES (IMPORTANT)
+
+1. Use only columns that exist in the provided metadata.  
+2. If a column is missing:
+   - Do NOT invent names or types.
+   - Return an "errors" section describing the issue.
+
+3. Avoid ambiguous columns:
+   - If multiple tables contain the same column name, always qualify with aliases: alias.column
+   - If no aliases exist, introduce them.
+
+4. Validate datatype compatibility before applying functions:
+   - DATE(), DATETIME(), TIMESTAMP() require compatible types.
+   - TIMESTAMP_MILLIS() requires INT64.
+   - If conversion is needed, add explicit CAST().
+   - If safe conversion cannot be determined, return a "RISK" classification with the reason.
+
+5. After generating SQL, perform internal consistency checks:
+   - Do all columns exist?
+   - Are datatypes compatible?
+   - Could this execute in BigQuery without semantic errors?
+
+6. If the SQL has issues:
+   - Do not output incorrect SQL.
+   - Instead output analysis and the root cause.
+
+7. Every candidate rewrite must include:
+   {
+     "sql": "...",
+     "justification": "...",
+     "semantic_safety": "SAFE" | "RISK (with reason)"
+   }
