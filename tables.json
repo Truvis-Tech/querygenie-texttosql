@@ -1,0 +1,2195 @@
+[
+    {
+        "data_source_id": "linen-striker-454116-c9",
+        "data_namespace": "techsteer",
+        "table_name_details": "test_data_cm_event_assignee_update",
+        "display_name": "CM Event Assignee Update Data",
+        "description": "This table contains records of updates to event assignees within the customer management system, tracking changes in event handling and assignment. It includes detailed nested information about the events within the 'ids' field.",
+        "columns_metadata": [
+          {
+            "column_path": "ids",
+            "data_type": "RECORD",
+            "mode": "REPEATED",
+            "description": "This is a REPEATED RECORD field, meaning it's an array of structured objects. Each object within this 'ids' array contains detailed event information, including 'payload', 'schema', 'timestamp', 'identifier', and 'alert_id'. To access any sub-fields within 'ids' (e.g., ids.payload.schema.lifecycle_id, ids.timestamp, ids.identifier, ids.payload.schema.alert_id), you must use BigQuery-specific syntax:\n\n- **To access all elements and their sub-fields (recommended for most analyses):** Use UNNEST(ids) AS alias_name. For example, SELECT alias_name.payload.schema.lifecycle_id FROM test_data_cm_event_assignee_update, UNNEST(ids) AS alias_name.\n\n- **To access sub-fields from only the first element of the array:** Use ids[SAFE_OFFSET(0)].<sub_field_path>. For example, SELECT ids[SAFE_OFFSET(0)].payload.schema.lifecycle_id FROM test_data_cm_event_assignee_update."
+          },
+          {
+            "column_path": "ids.identifier",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "Unique identifier for the specific event record within the 'ids' array. Used as a key column."
+          },
+          {
+            "column_path": "ids.timestamp",
+            "data_type": "TIMESTAMP",
+            "mode": "NULLABLE",
+            "description": "Timestamp of the event within the 'ids' record. Used for sorting."
+          },
+          {
+            "column_path": "ids.payload.schema.lifecycle_id",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "Unique identifier for the lifecycle of an event, nested within 'ids.payload.schema'. Can be used for filtering."
+          },
+          {
+            "column_path": "ids.payload.schema.event_type",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "The type of event (e.g., 'ASSIGNED', 'REASSIGNED'), nested within 'ids.payload.schema'. Can be used for filtering."
+          },
+          {
+            "column_path": "ids.payload.schema.customer_id",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "Identifier for the customer associated with the event, nested within 'ids.payload.schema'. Used as a key and filter column."
+          },
+          {
+            "column_path": "ids.payload.schema.customer_portfolio_region",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "Customer's portfolio region (e.g., 'EMEA', 'APAC'), nested within 'ids.payload.schema'. Can be used for filtering and aggregation."
+          },
+          {
+            "column_path": "ids.payload.schema.customer_portfolio_channel",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "Customer's portfolio channel, nested within 'ids.payload.schema'. Can be used for filtering and aggregation."
+          },
+          {
+            "column_path": "ids.payload.schema.customer_portfolio_class",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "Customer's portfolio class, nested within 'ids.payload.schema'. Can be used for filtering and aggregation."
+          },
+          {
+            "column_path": "ids.payload.schema.customer_portfolio_type",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "Customer's portfolio type, nested within 'ids.payload.schema'. Can be used for filtering and aggregation."
+          },
+          {
+            "column_path": "ids.payload.schema.customer_portfolio_country",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "Customer's portfolio country, nested within 'ids.payload.schema'. Can be used for filtering and aggregation."
+          },
+          {
+            "column_path": "ids.payload.schema.treatment_strategy",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "Treatment strategy applied to the customer, nested within 'ids.payload.schema'. Can be used for filtering and aggregation."
+          },
+          {
+            "column_path": "ids.payload.schema.customer_portfolio_product",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "Customer's portfolio product, nested within 'ids.payload.schema'. Can be used for filtering and aggregation."
+          },
+          {
+            "column_path": "ids.payload.schema.self_serve_strategy",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "Self-serve strategy for the customer, nested within 'ids.payload.schema'. Can be used for filtering and aggregation."
+          },
+          {
+            "column_path": "ids.payload.schema.alert_id",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "Identifier for an associated alert, nested within 'ids.payload.schema'. Used as a key column."
+          },
+          {
+            "column_path": "username",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "Username of the person who initiated the assignee update."
+          },
+          {
+            "column_path": "userId",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "User ID of the person who initiated the assignee update."
+          },
+          {
+            "column_path": "notificationVersion",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "Version of the notification system or schema related to this event."
+          },
+          {
+            "column_path": "updatedAt",
+            "data_type": "TIMESTAMP",
+            "mode": "NULLABLE",
+            "description": "Timestamp indicating when the assignee update record was last modified or created. Used for sorting."
+          },
+          {
+            "column_path": "updatedTimestamp",
+            "data_type": "TIMESTAMP",
+            "mode": "NULLABLE",
+            "description": "Another timestamp related to the update time of the record. Used for sorting."
+          }
+        ],
+        "filter_columns": [
+          "ids.payload.schema.lifecycle_id",
+          "ids.payload.schema.event_type",
+          "ids.payload.schema.customer_id",
+          "ids.payload.schema.customer_portfolio_region",
+          "ids.payload.schema.customer_portfolio_channel",
+          "ids.payload.schema.customer_portfolio_class",
+          "ids.payload.schema.customer_portfolio_type",
+          "ids.payload.schema.customer_portfolio_country",
+          "ids.payload.schema.treatment_strategy",
+          "ids.payload.schema.customer_portfolio_product",
+          "ids.payload.schema.self_serve_strategy",
+          "username",
+          "userId",
+          "notificationVersion"
+        ],
+        "aggregate_columns": [
+          "ids.payload.schema.customer_portfolio_region",
+          "ids.payload.schema.customer_portfolio_channel",
+          "ids.payload.schema.customer_portfolio_class",
+          "ids.payload.schema.customer_portfolio_type",
+          "ids.payload.schema.customer_portfolio_country",
+          "ids.payload.schema.treatment_strategy",
+          "ids.payload.schema.customer_portfolio_product",
+          "ids.payload.schema.self_serve_strategy"
+        ],
+        "sort_columns": [
+          "ids.timestamp",
+          "updatedAt",
+          "updatedTimestamp"
+        ],
+        "key_columns": [
+          "ids.identifier",
+          "ids.payload.schema.alert_id",
+          "ids.payload.schema.customer_id"
+        ],
+        "related_business_terms": [
+          "Customer Management",
+          "Event Handling",
+          "Assignee Tracking",
+          "Portfolio Management",
+          "Alert System"
+        ],
+        "tags": [
+          "Customer Management",
+          "Event Tracking",
+          "Assignee Updates",
+          "Portfolio Data",
+          "Financial Data"
+        ], 
+        "sample_usage": [
+            {
+              "description": "Find all driver lifecycles that started after a specific date",
+              "sql": "SELECT lifecycle_id, start_timestamp FROM cm_driver_master WHERE start_timestamp > '2023-01-01T00:00:00Z'"
+            },
+            {
+              "description": "Count the number of active driver lifecycles",
+              "sql": "SELECT COUNT(*) FROM cm_driver_master WHERE end_timestamp IS NULL"
+            }
+          ],
+          "join_tables": [
+            {
+              "table_name": "event_store",
+              "join_condition": "cm_driver_master.lifecycle_id = event_store.lifecycle_id",
+              "join_type": "LEFT JOIN"
+            }
+          ]
+    },
+    {
+        "data_source_id": "linen-striker-454116-c9",
+        "data_namespace": "techsteer",
+        "table_name_details": "test_data_cm_event_state_updates",
+        "display_name": "CM Event State Updates",
+        "description": "This table records updates to the state of various customer management (CM) events, tracking changes in event states, user interactions, and system notifications. It is designed to support the monitoring and analysis of workflow progress, user activity, and system notifications within the customer management system.",
+        "columns_metadata": [
+          {
+            "column_path": "userId",
+            "data_type": "STRING",
+            "mode": "REQUIRED",
+            "description": "The ID of the user associated with the event state update. This is a REQUIRED field and serves as a key column for tracking user activity."
+          },
+          {
+            "column_path": "stateMachineId",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "The unique identifier for the state machine instance governing the event's workflow. Used as a key column to track specific workflow processes."
+          },
+          {
+            "column_path": "updatedAt",
+            "data_type": "INTEGER",
+            "mode": "NULLABLE",
+            "description": "Timestamp (as an integer) indicating when this event state update record was last modified or created. Used for sorting."
+          },
+          {
+            "column_path": "username",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "The username of the individual who performed the event state update."
+          },
+          {
+            "column_path": "state",
+            "data_type": "RECORD",
+            "mode": "NULLABLE",
+            "description": "A nested record representing the new state of the event. To access its sub-fields (e.g., 'state.id'), you can directly reference them in BigQuery SQL."
+          },
+          {
+            "column_path": "state.id",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "The unique identifier of the event's new state (e.g., 'OPEN', 'CLOSED', 'PENDING'). Nested within the 'state' record. Can be used for filtering and aggregation."
+          },
+          {
+            "column_path": "version",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "The version of the event state update record or the associated system component."
+          },
+          {
+            "column_path": "timestamp",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "The timestamp of the event state update, stored as a string. Used for filtering and sorting."
+          },
+          {
+            "column_path": "notificationVersion",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "The version of the notification system or schema relevant to this event update."
+          },
+          {
+            "column_path": "reasons",
+            "data_type": "RECORD",
+            "mode": "REPEATED",
+            "description": "This is a REPEATED RECORD field, meaning it's an array of structured objects. Each object within this 'reasons' array contains detailed reasons for the event state change, including 'id', 'statusId', and 'name'.\n\nTo access any sub-fields within 'reasons' (e.g., 'reasons.statusId', 'reasons.name'), you must use BigQuery-specific syntax:\n\n- **To access all elements and their sub-fields (recommended for most analyses):** Use UNNEST(reasons) AS reasons_alias. For example, SELECT reasons_alias.statusId FROM test_data_cm_event_state_updates, UNNEST(reasons) AS reasons_alias.\n\n- **To access sub-fields from only the first element of the array:** Use reasons[SAFE_OFFSET(0)].<sub_field_path>. For example, SELECT reasons[SAFE_OFFSET(0)].statusId FROM test_data_cm_event_state_updates."
+          },
+          {
+            "column_path": "reasons.id",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "The unique ID for a specific reason for the state change, nested within the 'reasons' repeated record."
+          },
+          {
+            "column_path": "reasons.statusId",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "The status ID associated with a reason for the state change (e.g., 'CLOSED_BY_USER', 'AUTO_RESOLVED'). Nested within the 'reasons' repeated record. Can be used for filtering and aggregation."
+          },
+          {
+            "column_path": "reasons.name",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "The human-readable name or description of a reason for the state change, nested within the 'reasons' repeated record."
+          },
+          {
+            "column_path": "ids",
+            "data_type": "RECORD",
+            "mode": "REPEATED",
+            "description": "This is a REPEATED RECORD field, meaning it's an array of structured objects. Each object within this 'ids' array contains detailed event identification, including 'channelId', 'identifier', 'timestamp', and a 'payload' record with schema details.\n\nTo access any sub-fields within 'ids' (e.g., 'ids.identifier', 'ids.payload.schema.customer_id'), you must use BigQuery-specific syntax:\n\n- **To access all elements and their sub-fields (recommended for most analyses):** Use UNNEST(ids) AS ids_alias. For example, SELECT ids_alias.payload.schema.customer_id FROM test_data_cm_event_state_updates, UNNEST(ids) AS ids_alias.\n\n- **To access sub-fields from only the first element of the array:** Use ids[SAFE_OFFSET(0)].<sub_field_path>. For example, SELECT ids[SAFE_OFFSET(0)].payload.schema.customer_id FROM test_data_cm_event_state_updates."
+          },
+          {
+            "column_path": "ids.channelId",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "The channel ID associated with the event, nested within the 'ids' repeated record."
+          },
+          {
+            "column_path": "ids.identifier",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "A unique identifier for the event instance, nested within the 'ids' repeated record."
+          },
+          {
+            "column_path": "ids.timestamp",
+            "data_type": "INTEGER",
+            "mode": "NULLABLE",
+            "description": "The timestamp of the event within the 'ids' record, stored as an integer."
+          },
+          {
+            "column_path": "ids.payload",
+            "data_type": "RECORD",
+            "mode": "NULLABLE",
+            "description": "A nested record within the 'ids' array containing the event's payload, which includes detailed schema information."
+          },
+          {
+            "column_path": "ids.payload.schema",
+            "data_type": "RECORD",
+            "mode": "NULLABLE",
+            "description": "A nested record within 'ids.payload' containing the structured schema of the event payload."
+          },
+          {
+            "column_path": "ids.payload.schema.alert_id",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "Identifier for an associated alert, nested within 'ids.payload.schema'."
+          },
+          {
+            "column_path": "ids.payload.schema.event_type",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "The type of event (e.g., 'STATE_CHANGE'), nested within 'ids.payload.schema'."
+          },
+          {
+            "column_path": "ids.payload.schema.lifecycle_id",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "Unique identifier for the lifecycle of an event, nested within 'ids.payload.schema'."
+          },
+          {
+            "column_path": "ids.payload.schema.pib_suspended",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "Indicates if PIB (Process Information Block) is suspended, nested within 'ids.payload.schema'."
+          },
+          {
+            "column_path": "ids.payload.schema.customer_id",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "Customer identifier related to the event, nested within 'ids.payload.schema'. Can be used for filtering."
+          },
+          {
+            "column_path": "ids.payload.schema.customer_portfolio_type",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "Customer's portfolio type, nested within 'ids.payload.schema'. Can be used for filtering."
+          },
+          {
+            "column_path": "ids.payload.schema.customer_portfolio_region",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "Customer's portfolio region (e.g., 'EMEA', 'APAC'), nested within 'ids.payload.schema'. Can be used for filtering."
+          },
+          {
+            "column_path": "ids.payload.schema.customer_portfolio_class",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "Customer's portfolio class, nested within 'ids.payload.schema'. Can be used for filtering."
+          },
+          {
+            "column_path": "ids.payload.schema.customer_portfolio_channel",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "Customer's portfolio channel, nested within 'ids.payload.schema'. Can be used for filtering."
+          },
+          {
+            "column_path": "ids.payload.schema.customer_portfolio_product",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "Customer's portfolio product, nested within 'ids.payload.schema'. Can be used for filtering."
+          },
+          {
+            "column_path": "ids.payload.schema.customer_portfolio_country",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "Customer's portfolio country, nested within 'ids.payload.schema'. Can be used for filtering."
+          },
+          {
+            "column_path": "ids.payload.schema.treatment_strategy",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "Treatment strategy applied to the customer, nested within 'ids.payload.schema'. Can be used for filtering."
+          },
+          {
+            "column_path": "ids.payload.schema.self_serve_strategy",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "Self-serve strategy for the customer, nested within 'ids.payload.schema'. Can be used for filtering."
+          },
+          {
+            "column_path": "ids.payload.schema.customer_id_number",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "Numeric customer ID, nested within 'ids.payload.schema'."
+          },
+          {
+            "column_path": "note",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "Any additional notes or comments related to the event state update."
+          },
+          {
+            "column_path": "updatedTimestamp",
+            "data_type": "TIMESTAMP",
+            "mode": "NULLABLE",
+            "description": "Another timestamp indicating when the record was updated, likely a BigQuery TIMESTAMP type. Used for sorting."
+          }
+        ],
+        "filter_columns": [
+          "timestamp",
+          "userId",
+          "state.id",
+          "reasons.statusId",
+          "ids.payload.schema.customer_portfolio_region",
+          "ids.payload.schema.customer_portfolio_class",
+          "ids.payload.schema.customer_id"
+        ],
+        "aggregate_columns": [
+          "timestamp",
+          "state.id",
+          "reasons.statusId"
+        ],
+        "sort_columns": [
+          "timestamp",
+          "updatedAt",
+          "updatedTimestamp"
+        ],
+        "key_columns": [
+          "stateMachineId",
+          "userId"
+        ],
+        "related_business_terms": [
+          "Workflow Management",
+          "User Activity Tracking",
+          "System Notifications",
+          "Event State Changes",
+          "Customer Portfolio Management"
+        ],
+        "tags": [
+          "Customer Management",
+          "Event Tracking",
+          "State Updates",
+          "Workflow Progress",
+          "System Notifications"
+        ],
+        "join_tables": [
+            {
+              "table_name": "event_store",
+              "join_condition": "cm_event_state_updates.ids[OFFSET(0)].identifier = event_store.lifecycle_id",
+              "join_type": "LEFT JOIN"
+            }
+          ],
+          "sample_usage": [
+            {
+              "description": "Find all events that are currently in the 'in_review' state",
+              "sql": "SELECT ids, updatedAt FROM cm_event_state_updates WHERE state = 'in_review'"
+            },
+            {
+              "description": "Count the number of state updates per user",
+              "sql": "SELECT username, COUNT(*) FROM cm_event_state_updates GROUP BY username"
+            }
+          ]
+    },
+    {
+        "data_source_id": "linen-striker-454116-c9",
+        "data_namespace": "techsteer",
+        "table_name_details": "test_data_cm_event_queue_changed",
+        "display_name": "Event Queue Changes",
+        "description": "This table records changes in the event queue, including updates to customer portfolio information, event types, and notification versions. It is designed to track the lifecycle of events from their initiation to completion, providing insights into customer engagement strategies and operational efficiency.",
+        "columns_metadata": [
+          {
+            "column_path": "version",
+            "data_type": "STRING",
+            "mode": "REQUIRED",
+            "description": "The version of the event queue change record. This is a REQUIRED field."
+          },
+          {
+            "column_path": "ids",
+            "data_type": "RECORD",
+            "mode": "REPEATED",
+            "description": "This is a REPEATED RECORD field, meaning it's an array of structured objects. Each object within this 'ids' array contains detailed event identification and payload information, including 'channelId', 'identifier', 'timestamp', and a nested 'payload' record.\n\nTo access any sub-fields within 'ids' (e.g., 'ids.identifier', 'ids.payload.schema.customer_id'), you must use BigQuery-specific syntax:\n\n- **To access all elements and their sub-fields (recommended for most analyses):** Use UNNEST(ids) AS ids_alias. For example, SELECT ids_alias.payload.schema.customer_id FROM test_data_cm_event_queue_changed, UNNEST(ids) AS ids_alias.\n\n- **To access sub-fields from only the first element of the array:** Use ids[SAFE_OFFSET(0)].<sub_field_path>. For example, SELECT ids[SAFE_OFFSET(0)].payload.schema.customer_id FROM test_data_cm_event_queue_changed."
+          },
+          {
+            "column_path": "ids.channelId",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "The channel ID associated with the event, nested within the 'ids' repeated record. Can be used for filtering."
+          },
+          {
+            "column_path": "ids.identifier",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "A unique identifier for the event instance, nested within the 'ids' repeated record. Used as a key column."
+          },
+          {
+            "column_path": "ids.timestamp",
+            "data_type": "INTEGER",
+            "mode": "NULLABLE",
+            "description": "The timestamp of the event within the 'ids' record, stored as an integer. Used for sorting."
+          },
+          {
+            "column_path": "ids.payload",
+            "data_type": "RECORD",
+            "mode": "NULLABLE",
+            "description": "A nested record within the 'ids' array containing the event's payload, which includes detailed schema information."
+          },
+          {
+            "column_path": "ids.payload.schema",
+            "data_type": "RECORD",
+            "mode": "NULLABLE",
+            "description": "A nested record within 'ids.payload' containing the structured schema of the event payload."
+          },
+          {
+            "column_path": "ids.payload.schema.alert_id",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "Identifier for an associated alert, nested within 'ids.payload.schema'."
+          },
+          {
+            "column_path": "ids.payload.schema.event_type",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "The type of event (e.g., 'QUEUE_CHANGE'), nested within 'ids.payload.schema'. Can be used for filtering."
+          },
+          {
+            "column_path": "ids.payload.schema.lifecycle_id",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "Unique identifier for the lifecycle of an event, nested within 'ids.payload.schema'."
+          },
+          {
+            "column_path": "ids.payload.schema.pib_suspended",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "Indicates if PIB (Process Information Block) is suspended, nested within 'ids.payload.schema'."
+          },
+          {
+            "column_path": "ids.payload.schema.customer_id",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "Customer identifier related to the event, nested within 'ids.payload.schema'. Can be used for filtering."
+          },
+          {
+            "column_path": "ids.payload.schema.customer_portfolio_type",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "Customer's portfolio type, nested within 'ids.payload.schema'. Can be used for aggregation."
+          },
+          {
+            "column_path": "ids.payload.schema.customer_portfolio_region",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "Customer's portfolio region (e.g., 'EMEA', 'APAC'), nested within 'ids.payload.schema'. Can be used for filtering."
+          },
+          {
+            "column_path": "ids.payload.schema.customer_portfolio_class",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "Customer's portfolio class, nested within 'ids.payload.schema'. Can be used for aggregation."
+          },
+          {
+            "column_path": "ids.payload.schema.customer_portfolio_channel",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "Customer's portfolio channel, nested within 'ids.payload.schema'. Can be used for filtering."
+          },
+          {
+            "column_path": "ids.payload.schema.customer_portfolio_product",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "Customer's portfolio product, nested within 'ids.payload.schema'. Can be used for aggregation."
+          },
+          {
+            "column_path": "ids.payload.schema.customer_portfolio_country",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "Customer's portfolio country, nested within 'ids.payload.schema'. Can be used for aggregation."
+          },
+          {
+            "column_path": "ids.payload.schema.treatment_strategy",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "Treatment strategy applied to the customer, nested within 'ids.payload.schema'."
+          },
+          {
+            "column_path": "ids.payload.schema.self_serve_strategy",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "Self-serve strategy for the customer, nested within 'ids.payload.schema'."
+          },
+          {
+            "column_path": "ids.payload.schema.customer_id_number",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "Numeric customer ID, nested within 'ids.payload.schema'."
+          },
+          {
+            "column_path": "notificationVersion",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "The version of the notification system or schema relevant to this queue change event."
+          },
+          {
+            "column_path": "queueId",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "The identifier for the specific event queue. Used as a key column."
+          },
+          {
+            "column_path": "timestamp",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "The top-level timestamp when the event queue change was recorded, stored as a string."
+          },
+          {
+            "column_path": "updatedTimestamp",
+            "data_type": "TIMESTAMP",
+            "mode": "NULLABLE",
+            "description": "The timestamp indicating when the record was last updated, specifically a BigQuery TIMESTAMP type. Used for sorting."
+          }
+        ],
+        "filter_columns": [
+          "ids.channelId",
+          "ids.payload.schema.event_type",
+          "ids.payload.schema.customer_portfolio_region",
+          "ids.payload.schema.customer_portfolio_channel",
+          "ids.payload.schema.customer_id"
+        ],
+        "aggregate_columns": [
+          "ids.payload.schema.customer_portfolio_type",
+          "ids.payload.schema.customer_portfolio_class",
+          "ids.payload.schema.customer_portfolio_country",
+          "ids.payload.schema.customer_portfolio_product"
+        ],
+        "sort_columns": [
+          "ids.timestamp",
+          "updatedTimestamp"
+        ],
+        "key_columns": [
+          "ids.identifier",
+          "queueId"
+        ],
+        "related_business_terms": [
+          "Channel Management",
+          "Digital Marketing",
+          "Customer Engagement",
+          "Unique Identifier",
+          "Software Versioning",
+          "Data Version Control",
+          "PIB - Product Information Block",
+          "Suspended Status",
+          "Transaction Availability",
+          "Event Timing",
+          "Transaction Timestamp",
+          "ISO 8601"
+        ],
+        "tags": [
+          "Event Queue",
+          "Customer Portfolio",
+          "Change Management",
+          "Operational Data",
+          "Engagement Tracking"
+        ],
+        "join_tables": [
+          {
+            "table_name": "event_store",
+            "join_condition": "cm_event_queue_changed.ids[OFFSET(0)].identifier = event_store.lifecycle_id",
+            "join_type": "LEFT JOIN"
+          }
+        ],
+        "sample_usage": [
+          {
+            "description": "Find all events for a specific queue",
+            "sql": "SELECT ids, timestamp FROM cm_event_queue_changed WHERE queueId = 'high_priority'"
+          },
+          {
+            "description": "Count the number of queue changes per day",
+            "sql": "SELECT DATE(timestamp) as change_date, COUNT(*) FROM cm_event_queue_changed GROUP BY change_date"
+          }
+        ]
+    },
+    {
+        "data_source_id": "linen-striker-454116-c9",
+        "data_namespace": "techsteer",
+        "table_name_details": "test_data_cm_driver_master",
+        "display_name": "Driver Master Data",
+        "description": "This table contains master data for drivers, including timestamps marking the start and end of events, update records, and lifecycle identifiers.",
+        "columns_metadata": [
+          {
+            "column_path": "lifecycle_id",
+            "data_type": "STRING",
+            "mode": "REQUIRED",
+            "description": "A unique identifier for the lifecycle of a driver or event. This is a REQUIRED key column."
+          },
+          {
+            "column_path": "start_timestamp",
+            "data_type": "TIMESTAMP",
+            "mode": "NULLABLE",
+            "description": "The timestamp indicating the beginning of an event or lifecycle phase. Used for sorting."
+          },
+          {
+            "column_path": "end_timestamp",
+            "data_type": "TIMESTAMP",
+            "mode": "NULLABLE",
+            "description": "The timestamp indicating the end or completion of an event or lifecycle phase. Used for sorting."
+          },
+          {
+            "column_path": "updatedTimestamp",
+            "data_type": "TIMESTAMP",
+            "mode": "NULLABLE",
+            "description": "The timestamp when the record was last updated. Used for sorting."
+          },
+          {
+            "column_path": "bq_insert_timestamp",
+            "data_type": "TIMESTAMP",
+            "mode": "NULLABLE",
+            "description": "The timestamp when the record was inserted into BigQuery. Used for sorting."
+          }
+        ],
+        "filter_columns": [],
+        "aggregate_columns": [],
+        "sort_columns": [
+          "start_timestamp",
+          "end_timestamp",
+          "updatedTimestamp",
+          "bq_insert_timestamp"
+        ],
+        "key_columns": [
+          "lifecycle_id"
+        ],
+        "related_business_terms": [
+          "Transaction Completion Time",
+          "Event End Time",
+          "Record Closure Time",
+          "Event Start Time",
+          "Transaction Begin Time",
+          "UTC Timestamp",
+          "Data Audit",
+          "Record Management",
+          "Timestamping",
+          "Data Ingestion Time",
+          "Record Creation Time",
+          "System Generated Timestamp",
+          "Lifecycle Management",
+          "Product Lifecycle",
+          "Customer Journey",
+          "Transaction Processing"
+        ],
+        "tags": [
+          "Driver Data",
+          "Master Table",
+          "Timestamps",
+          "Lifecycle Tracking",
+          "Financial Data"
+        ],
+        "join_tables": [
+          {
+            "table_name": "event_store",
+            "join_condition": "cm_driver_master.lifecycle_id = event_store.lifecycle_id",
+            "join_type": "LEFT JOIN"
+          }
+        ],
+        "sample_usage": [
+          {
+            "description": "Find all driver lifecycles that started after a specific date",
+            "sql": "SELECT lifecycle_id, start_timestamp FROM cm_driver_master WHERE start_timestamp > '2023-01-01T00:00:00Z'"
+          },
+          {
+            "description": "Count the number of active driver lifecycles",
+            "sql": "SELECT COUNT(*) FROM cm_driver_master WHERE end_timestamp IS NULL"
+          }
+        ]
+    },
+    {
+        "data_source_id": "linen-striker-454116-c9",
+        "data_namespace": "techsteer",
+        "table_name_details": "test_data_cm_event_arrival",
+        "display_name": "CM Event Arrival Data",
+        "description": "This table contains comprehensive details about customer management events, including notifications, alerts, and customer portfolio information. It is designed to track and manage significant events that affect customer management strategies, ensuring that all relevant data is captured for analysis and decision-making.",
+        "columns_metadata": [
+          {
+            "column_path": "alert",
+            "data_type": "BOOLEAN",
+            "mode": "NULLABLE",
+            "description": "Indicates whether an alert is associated with the event (true/false)."
+          },
+          {
+            "column_path": "version",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "The version of the event arrival record."
+          },
+          {
+            "column_path": "versionId",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "A specific ID for the version of this record."
+          },
+          {
+            "column_path": "notificationVersion",
+            "data_type": "STRING",
+            "mode": "REQUIRED",
+            "description": "The version of the notification system or schema relevant to this event. This is a REQUIRED field."
+          },
+          {
+            "column_path": "id",
+            "data_type": "RECORD",
+            "mode": "NULLABLE",
+            "description": "A nested record containing identification details for the event. To access its sub-fields (e.g., 'id.identifier', 'id.payload.schema.customer_id'), you can directly reference them in BigQuery SQL."
+          },
+          {
+            "column_path": "id.channelId",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "The channel ID associated with the event, nested within the 'id' record."
+          },
+          {
+            "column_path": "id.identifier",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "A unique identifier for the event instance, nested within the 'id' record. Used as a key column."
+          },
+          {
+            "column_path": "id.timestamp",
+            "data_type": "INTEGER",
+            "mode": "NULLABLE",
+            "description": "The timestamp of the event within the 'id' record, stored as an integer. Used for sorting."
+          },
+          {
+            "column_path": "id.payload",
+            "data_type": "RECORD",
+            "mode": "NULLABLE",
+            "description": "A nested record within 'id' containing the event's payload, which includes detailed schema information."
+          },
+          {
+            "column_path": "id.payload.schema",
+            "data_type": "RECORD",
+            "mode": "NULLABLE",
+            "description": "A nested record within 'id.payload' containing the structured schema of the event payload."
+          },
+          {
+            "column_path": "id.payload.schema.alert_id",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "Identifier for an associated alert, nested within 'id.payload.schema'. Can be used for filtering and as a key column."
+          },
+          {
+            "column_path": "id.payload.schema.event_type",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "The type of event (e.g., 'ARRIVAL'), nested within 'id.payload.schema'. Can be used for filtering."
+          },
+          {
+            "column_path": "id.payload.schema.lifecycle_id",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "Unique identifier for the lifecycle of an event, nested within 'id.payload.schema'. Can be used for filtering."
+          },
+          {
+            "column_path": "id.payload.schema.pib_suspended",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "Indicates if PIB (Process Information Block) is suspended, nested within 'id.payload.schema'. Can be used for filtering."
+          },
+          {
+            "column_path": "id.payload.schema.customer_id",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "Customer identifier related to the event, nested within 'id.payload.schema'. Used as a key column and can be used for aggregation."
+          },
+          {
+            "column_path": "id.payload.schema.customer_portfolio_type",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "Customer's portfolio type, nested within 'id.payload.schema'. Can be used for filtering."
+          },
+          {
+            "column_path": "id.payload.schema.customer_portfolio_region",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "Customer's portfolio region (e.g., 'EMEA', 'APAC'), nested within 'id.payload.schema'. Can be used for filtering."
+          },
+          {
+            "column_path": "id.payload.schema.customer_portfolio_class",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "Customer's portfolio class, nested within 'id.payload.schema'. Can be used for filtering."
+          },
+          {
+            "column_path": "id.payload.schema.customer_portfolio_channel",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "Customer's portfolio channel, nested within 'id.payload.schema'. Can be used for filtering."
+          },
+          {
+            "column_path": "id.payload.schema.customer_portfolio_product",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "Customer's portfolio product, nested within 'id.payload.schema'. Can be used for filtering."
+          },
+          {
+            "column_path": "id.payload.schema.customer_portfolio_country",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "Customer's portfolio country, nested within 'id.payload.schema'. Can be used for filtering."
+          },
+          {
+            "column_path": "id.payload.schema.treatment_strategy",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "Treatment strategy applied to the customer, nested within 'id.payload.schema'."
+          },
+          {
+            "column_path": "id.payload.schema.self_serve_strategy",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "Self-serve strategy for the customer, nested within 'id.payload.schema'. Can be used for filtering."
+          },
+          {
+            "column_path": "id.payload.schema.customer_id_number",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "Numeric customer ID, nested within 'id.payload.schema'. Can be used for aggregation."
+          },
+          {
+            "column_path": "versionTimestamp",
+            "data_type": "INTEGER",
+            "mode": "NULLABLE",
+            "description": "Timestamp (as an integer) indicating the version's creation or modification time. Used for sorting."
+          },
+          {
+            "column_path": "timestamp",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "The top-level timestamp of the event arrival, stored as a string. Used for sorting."
+          },
+          {
+            "column_path": "updatedTimestamp",
+            "data_type": "TIMESTAMP",
+            "mode": "NULLABLE",
+            "description": "The timestamp indicating when the record was last updated, specifically a BigQuery TIMESTAMP type. Used for sorting."
+          }
+        ],
+        "filter_columns": [
+          "id.payload.schema.event_type",
+          "id.payload.schema.alert_id",
+          "id.payload.schema.pib_suspended",
+          "id.payload.schema.lifecycle_id",
+          "id.payload.schema.customer_portfolio_region",
+          "id.payload.schema.customer_portfolio_type",
+          "id.payload.schema.customer_portfolio_product",
+          "id.payload.schema.customer_portfolio_channel",
+          "id.payload.schema.customer_portfolio_class",
+          "id.payload.schema.customer_portfolio_country",
+          "id.payload.schema.self_serve_strategy"
+        ],
+        "aggregate_columns": [
+          "id.payload.schema.customer_id",
+          "id.payload.schema.customer_id_number"
+        ],
+        "sort_columns": [
+          "id.timestamp",
+          "updatedTimestamp",
+          "timestamp",
+          "versionTimestamp"
+        ],
+        "key_columns": [
+          "id.identifier",
+          "id.payload.schema.customer_id"
+        ],
+        "related_business_terms": [
+          "Version Control",
+          "Notification Management",
+          "Software Lifecycle",
+          "Fraud Detection",
+          "Compliance Monitoring",
+          "Risk Management",
+          "Unique Identifier",
+          "Entity ID",
+          "Record ID",
+          "Timestamp",
+          "ISO 8601",
+          "Data Traceability"
+        ],
+        "tags": [
+          "Customer Management",
+          "Event Tracking",
+          "Alerts",
+          "Portfolio Management"
+        ],
+        "join_tables": [
+    {
+      "table_name": "event_store",
+      "join_condition": "cm_event_arrival.id = event_store.event_external_id",
+      "join_type": "LEFT JOIN"
+    }
+  ],
+  "related_business_terms": [
+    "Event",
+    "Arrival",
+    "Notification"
+  ],
+  "sample_usage": [
+    {
+      "description": "Find all event arrivals for a specific version",
+      "sql": "SELECT id, timestamp FROM cm_event_arrival WHERE version = '1.0'"
+    },
+    {
+      "description": "Count the number of event arrivals per day",
+      "sql": "SELECT DATE(timestamp) as arrival_date, COUNT(*) FROM cm_event_arrival GROUP BY arrival_date"
+    }
+  ]
+    },
+    {
+        "table_name_details": "event_store",
+        "display_name": "Event Store",
+        "description": "Stores detailed information about transactional events, device metadata, sender/receiver attributes, and outcomes used for decision-making and risk assessment.",
+        "filter_columns": [
+          "event_type",
+          "sender_transaction_currency",
+          "outcome_decision",
+          "customer_email_last_update_at",
+          "payment_type",
+          "device_type",
+          "customer_country_code",
+          "customer_segment"
+        ],
+        "aggregate_columns": [
+          "sender_transaction_amount",
+          "receiver_transaction_amount",
+          "outcome_decision_approve_score",
+          "outcome_fraud_score",
+          "customer_salary_amount",
+          "current_account_monthly_debit_amount"
+        ],
+        "sort_columns": [
+          "created_at",
+          "sender_transaction_amount",
+          "event_occurred_at",
+          "event_received_at",
+          "event_updated_at"
+        ],
+        "key_columns": [
+          "lifecycle_id",
+          "event_external_id",
+          "user_id",
+          "session_id"
+        ],
+        "join_tables": [
+          {
+            "table_name": "cm_event_assignee_update",
+            "join_condition": "event_store.lifecycle_id = cm_event_assignee_update.ids[OFFSET(0)].identifier",
+            "join_type": "LEFT JOIN"
+          },
+          {
+            "table_name": "customer_profile",
+            "join_condition": "event_store.customer_id = customer_profile.customer_id",
+            "join_type": "LEFT JOIN"
+          },
+          {
+            "table_name": "device_metadata",
+            "join_condition": "event_store.device_id = device_metadata.device_id",
+            "join_type": "LEFT JOIN"
+          }
+        ],
+        "related_business_terms": [
+          "Event",
+          "Transaction",
+          "Lifecycle",
+          "Customer",
+          "Device",
+          "Outcome",
+          "Risk Assessment"
+        ],
+        "sample_usage": [
+          {
+            "description": "List all events where the transaction amount exceeds 1000",
+            "sql": "SELECT lifecycle_id, event_type, sender_transaction_amount FROM event_store WHERE sender_transaction_amount > 1000"
+          },
+          {
+            "description": "Count events per outcome decision type",
+            "sql": "SELECT outcome_decision, COUNT(*) FROM event_store GROUP BY outcome_decision"
+          },
+          {
+            "description": "Find high-risk transactions with fraud outcome",
+            "sql": "SELECT lifecycle_id, sender_transaction_amount, outcome_fraud FROM event_store WHERE outcome_fraud = TRUE AND outcome_fraud_score > 80"
+          }
+        ],
+        "tags": [
+          "transaction",
+          "events",
+          "review",
+          "decisioning",
+          "fraud",
+          "device",
+          "customer",
+          "analytics"
+        ],
+        "columns_metadata": [
+          {
+            "column_path": "lifecycle_id",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "bulk_id",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "payment_type",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "payment_sub_type",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "product_code",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "payment_status",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "created_at",
+            "data_type": "INTEGER",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "cutoff_at",
+            "data_type": "INTEGER",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "sender_initiated_at",
+            "data_type": "INTEGER",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "requested_execution_at",
+            "data_type": "INTEGER",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "number_of_payments",
+            "data_type": "INTEGER",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "recurring_payment",
+            "data_type": "BOOLEAN",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "sender_transaction_amount",
+            "data_type": "FLOAT",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "sender_transaction_currency",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "sender_transaction_bank_account_number",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "sender_transaction_notes",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "sender_bank_name",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "sender_bank_postal_code",
+            "data_type": "INTEGER",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "sender_bank_address",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "sender_bank_city",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "sender_bank_country_code",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "receiver_bank_bic",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "receiver_bank_name",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "receiver_bank_postal_code",
+            "data_type": "INTEGER",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "receiver_bank_address",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "receiver_bank_city",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "receiver_bank_country_code",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "receiver_transaction_amount",
+            "data_type": "FLOAT",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "receiver_transaction_currency",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "receiver_transaction_bank_account_number",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "receiver_city",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "receiver_country_code",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "device_type",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "device_ip_address",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "device_longitude",
+            "data_type": "FLOAT",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "device_latitude",
+            "data_type": "FLOAT",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "event_type",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "event_external_id",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "info_type",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "dispute_start_date",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "dispute_reason",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "dispute_notes",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "dispute_submitted_by",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "dispute_end_date",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "dispute_feedback_notes",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "dispute_refunded",
+            "data_type": "BOOLEAN",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "oob_start_date",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "oob_comm_type",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "oob_notes",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "oob_end_date",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "oob_feedback_notes",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "oob_response_type",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "feedback_type",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "feedback_label",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "sender_name",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "sender_email",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "sender_phone",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "sender_zip",
+            "data_type": "INTEGER",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "sender_dob",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "sender_occupation_status",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "sender_account_bic",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "sender_account_type",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "sender_account_currency",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "sender_account_balance",
+            "data_type": "FLOAT",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "receiver_id",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "receiver_name",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "receiver_email",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "receiver_phone",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "receiver_street_addr",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "receiver_zip",
+            "data_type": "INTEGER",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "receiver_region",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "receiver_dob",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "receiver_account_type",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "receiver_account_currency",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "direction",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "device_id",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "channel_type",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "sender_bank_sort_code",
+            "data_type": "INTEGER",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "sender_bank_branch_id",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "receiver_bank_sort_code",
+            "data_type": "INTEGER",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "receiver_bank_routing_number",
+            "data_type": "INTEGER",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "event_occurred_at",
+            "data_type": "INTEGER",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "segment_channel_type",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "auth_type",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "device_ip_country_code",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "session_id",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "device_language",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "sender_alias_type",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "text_for_receiver",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "device_user_agent",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "device_fingerprint",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "instant_transfers_review_outcome",
+            "data_type": "BOOLEAN",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "device_browser",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "device_ip_region",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "feedback_value",
+            "data_type": "BOOLEAN",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "sender_account_zip",
+            "data_type": "INTEGER",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "sender_bank_type",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "condor_rule_code",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "receiver_cop_name",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "receiver_cop_match_name",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "office_id",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "recurring_payment_schdl_info",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "sender_account_ownership",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "payment_sca_proc_code",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "customer_market_segment",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "sender_transaction_type",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "sender_transaction_auth_type",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "payment_message_type",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "payment_revision_code",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "receiver_account_bank_id",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "receiver_bank_type",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "tpp_name_alt",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "tpp_payee_payer",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "number_of_payments_count",
+            "data_type": "INTEGER",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "sender_phone_chg_date",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "customer_home_branch",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "recurring_payment_ref",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "customer_type",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "payment_remittance_info",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "sender_transaction_ref",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "phone_session_id",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "user_guid",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "customer_onboarding_method",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "sender_transaction_cat_code",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "sender_orig",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "payment_related_ref",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "sender_transaction_narrative",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "sender_transaction_cop_name",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "sender_transaction_cop_matname",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "sender_bank_status",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "sender_account_number_external",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "receiver_email_chg_date",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "sender_email_chg_date",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "receiver_bank_status",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "receiver_merchant_category",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "receiver_details",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "tpp_name",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "payment_saf",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "customer_work_phone1_chg_date",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "customer_work_phone2_chg_date",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "customer_home_phone1_chg_date",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "customer_home_phone2_chg_date",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "customer_email_chg_date",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "event_received_at",
+            "data_type": "INTEGER",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "event_updated_at",
+            "data_type": "INTEGER",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "customer_city",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "customer_country_code",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "customer_postal_code",
+            "data_type": "INTEGER",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "customer_occupation_status",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "customer_credit_score",
+            "data_type": "INTEGER",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "customer_segment",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "customer_risk_rating",
+            "data_type": "INTEGER",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "customer_id",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "customer_salary_currency",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "customer_salary_amount",
+            "data_type": "FLOAT",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "current_account_number",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "current_account_type",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "current_account_currency",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "current_account_balance",
+            "data_type": "FLOAT",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "current_account_monthly_credit_amount",
+            "data_type": "FLOAT",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "current_account_monthly_debit_amount",
+            "data_type": "FLOAT",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "customer_email_last_update_at",
+            "data_type": "INTEGER",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "outcome_decision",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "outcome_score",
+            "data_type": "INTEGER",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "outcome_review_reason",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "outcome_risk_reason",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "outcome_decision_approve_score",
+            "data_type": "INTEGER",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "outcome_fraud_score",
+            "data_type": "INTEGER",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "outcome_risk_level",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "outcome_fraud",
+            "data_type": "BOOLEAN",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "rules_triggered",
+            "data_type": "RECORD",
+            "mode": "REPEATED",
+            "description": "This is a REPEATED RECORD field, meaning it's an array of structured objects. To access its sub-fields (e.g., 'rules_triggered.<sub_field_name>'), you *must* use BigQuery-specific syntax:\n\n- **To access all elements and their sub-fields (recommended for most analyses):** Use `UNNEST(rules_triggered) AS rules_triggered_alias`. For example, `SELECT rules_triggered_alias.<sub_field_name> FROM event_store, UNNEST(rules_triggered) AS rules_triggered_alias`.\n\n- **To access sub-fields from only the *first* element of the array:** Use `rules_triggered[SAFE_OFFSET(0)].<sub_field_name>`. For example, `SELECT rules_triggered[SAFE_OFFSET(0)].<sub_field_name> FROM event_store`."
+          },
+          {
+            "column_path": "rules_triggered.id",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "rules_triggered.name",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "rules_triggered.description",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "fdz_uuid",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "formatted_results",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "outcomes_and_scores",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "is_historic",
+            "data_type": "BOOLEAN",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "saf_ind",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "action_alert",
+            "data_type": "BOOLEAN",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          },
+          {
+            "column_path": "customer_fiv_markers",
+            "data_type": "STRING",
+            "mode": "NULLABLE",
+            "description": "This field is NULLABLE."
+          }
+        ]
+    }
+]

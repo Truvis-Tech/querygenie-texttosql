@@ -23,6 +23,7 @@ from src.database.postgres_vector_loader import PostgresVectorLoader
 from src.services.ragQueryPipline import RAGPipeline
 from src.utils.logger import logger
 from src.database.db_config import GoogleCloudSqlUtility
+from src.services.sql_optimisation_service import SqlOptimisationService
 
 # nltk.download('punkt')
 # nltk.download('words')
@@ -244,6 +245,48 @@ def execute_query(payload: QueryPayload, user: dict = Depends(verify_token)):
             content={'result': [], 'metadata': "", 'sql_query': "", 'textual_summary': [f"BigQuery Error: {str(e)}"], 'followup_prompts': [], "x-axis": "", "typeOFgraph": ""}
         )
 
+class OptimizeSqlRequest(BaseModel):
+    market_name: str
+    llm_type: str
+    sql_query: str
+
+# @router.post("/optimize_sql_query_by_llm")
+# def optimize_sql_query_by_llm(payload: OptimizeSqlRequest, user: dict = Depends(verify_token)):
+#     username = user.get('username', 'unknown')
+#     logger.info("OPTIMIZE_SQL started - User: %s, Market: %s", username, payload.market_name)
+
+#     if os.getenv("TEST_MODE") == "true":
+#         logger.info("TEST_MODE enabled - returning mock response for optimize_sql_query_by_llm")
+#         return JSONResponse(content={"message": "Mocked response in test mode", "echo": payload.model_dump()}, status_code=200)
+
+#     try:
+#         service = SqlOptimisationService(payload.market_name, payload.llm_type)
+#         result = service.optimise_sql_query(payload.sql_query)
+#         status = 200 if isinstance(result, dict) and "error" not in result else 400
+#         return JSONResponse(status_code=status, content=result)
+#     except Exception as e:
+#         logger.exception("OPTIMIZE_SQL_ERROR - User: %s, Market: %s, Error: %s", username, payload.market_name, str(e))
+#         raise HTTPException(status_code=500, detail=f"Unexpected error: {str(e)}")
+
+@router.post("/optimize_sql_query_by_llm")
+def optimize_sql_query_by_llm(payload: OptimizeSqlRequest):
+    username = 'unknown'
+    logger.info("OPTIMIZE_SQL started - User: %s, Market: %s", username, payload.market_name)
+
+    if os.getenv("TEST_MODE") == "true":
+        logger.info("TEST_MODE enabled - returning mock response for optimize_sql_query_by_llm")
+        return JSONResponse(content={"message": "Mocked response in test mode", "echo": payload.model_dump()}, status_code=200)
+
+    try:
+        service = SqlOptimisationService(payload.market_name, payload.llm_type)
+        result = service.optimise_sql_query(payload.sql_query)
+        status = 200 if isinstance(result, dict) and "error" not in result else 400
+        return JSONResponse(status_code=status, content=result)
+    except Exception as e:
+        logger.exception("OPTIMIZE_SQL_ERROR - User: %s, Market: %s, Error: %s", username, payload.market_name, str(e))
+        raise HTTPException(status_code=500, detail=f"Unexpected error: {str(e)}")
+
+
 class MetadataRequest(BaseModel):
     metadata_type: str  # "table" or "column"
     market: str
@@ -263,8 +306,7 @@ async def postgres_loader(request: MetadataRequest):
         columns_path = db_util.input_dir  # Update if you have a specific columns_path property
         project_id = db_util.project_id
         dataset_id = getattr(db_util, 'dataset_id', None)  # Add dataset_id property to db_config.py if needed
-
-        postgres_loader = PostgresLoader()
+        postgres_loader = PostgresLoader(request.market)
 
         if request.metadata_type == "table":
             logger.info("Processing table metadata from: %s", tables_path)
@@ -392,141 +434,72 @@ def pg_vector_loader(request: MetadataRequest):
     if os.getenv("TEST_MODE") == "true":
         return JSONResponse(content={"message": "Mocked response in test mode"}, status_code=200)
     
-    config = load_config(request.market)
-    tables_path = config.get('Database', 'tables_path')
-    columns_path = config.get('Database', 'columns_path')
-    project_id = config.get('Database', 'bigquery_project')
-    dataset_id = config.get('Database', 'bigquery_dataset')
+    try:
+        config = load_config(request.market)
+        db_tables_path = config.get('Database', 'tables_path')
+        db_column_path = config.get('Database', 'columns_path')
+        project_id = config.get('Database', 'bigquery_project')
+        dataset_id = config.get('Database', 'bigquery_dataset')
 
-    postgres_vector_loader = PostgresVectorLoader(request.market)
+        postgres_vector_loader = PostgresVectorLoader(request.market)
 
-    if request.metadata_type == "table":
-        # postgres_vector_loader.create_table_context()
-        data = JSONLoader(
-            file_path=tables_path,
-            jq_schema='.',
-            text_content=False,
-            json_lines=False
-        ).load()
-
-        for doc in data:
-            record = json.loads(doc.page_content)
-            record['data_source_id'] = project_id
-            record['data_namespace'] = dataset_id
-            postgres_vector_loader.insert_table_context(record, "table_context")
-
-        return JSONResponse(
-            content={"status": "success", "message": "table_context metadata inserted successfully"},
-            status_code=200
-        )
-
-    elif request.metadata_type == "column":
-        # postgres_vector_loader.create_column_context()
-        try:
+        if request.metadata_type == "table":
             data = JSONLoader(
-                file_path=columns_path,
-                jq_schema='.[]',
+                file_path=db_tables_path,
+                jq_schema='.',
                 text_content=False,
                 json_lines=False
             ).load()
-        except Exception as e:
-            raise HTTPException(
-                status_code=500,
-                detail=f"Error loading column metadata: {str(e)}"
+
+            for doc in data:
+                records = json.loads(doc.page_content)
+                # Check if records is a list or a single record
+                if isinstance(records, list):
+                    for record in records:
+                        record['data_source_id'] = project_id
+                        record['data_namespace'] = dataset_id
+                        postgres_vector_loader.insert_table_context(record, "table_context")
+                else:
+                    # Handle case where it's a single record
+                    records['data_source_id'] = project_id
+                    records['data_namespace'] = dataset_id
+                    postgres_vector_loader.insert_table_context(records, "table_context")
+
+            return JSONResponse(
+                content={"status": "success", "message": "table_context metadata inserted successfully"},
+                status_code=200
             )
-    
-        for doc in data:
-            record = json.loads(doc.page_content)
-            record['data_source_id'] = project_id
-            record['data_namespace'] = dataset_id
-            postgres_vector_loader.insert_column_context(record, "column_context")
-            
-        return JSONResponse(
-            content={"status": "success", "message": "column_context metadata inserted successfully"},
-            status_code=200
-        )
-        
-    else:
-        raise HTTPException(
-            status_code=400,
-            detail="Invalid metadata_type. Must be 'table' or 'column'."
-        )
 
-    # except Exception as e:
-    #     raise HTTPException(
-    #         status_code=500,
-    #         detail=f"Unexpected error: {str(e)}"
-    #     )
-
-@router.post("/pg_vector_loader")
-def pg_vector_loader(request: MetadataRequest):
-    if os.getenv("TEST_MODE") == "true":
-        return JSONResponse(content={"message": "Mocked response in test mode"}, status_code=200)
-    
-    config = load_config(request.market)
-    db_tables_path = config.get('Database', 'tables_path')
-    db_column_path = config.get('Database', 'columns_path')
-    project_id = config.get('Database', 'bigquery_project')
-    dataset_id = config.get('Database', 'bigquery_dataset')
-
-    postgres_vector_loader = PostgresVectorLoader(request.market)
-
-    if request.metadata_type == "table":
-        data = JSONLoader(
-            file_path=db_tables_path,
-            jq_schema='.',
-            text_content=False,
-            json_lines=False
-        ).load()
-
-        for doc in data:
-            records = json.loads(doc.page_content)
-            # Check if records is a list or a single record
-            if isinstance(records, list):
-                for record in records:
-                    record['data_source_id'] = project_id
-                    record['data_namespace'] = dataset_id
-                    postgres_vector_loader.insert_table_context(record, "table_context")
-            else:
-                # Handle case where it's a single record
-                records['data_source_id'] = project_id
-                records['data_namespace'] = dataset_id
-                postgres_vector_loader.insert_table_context(records, "table_context")
-
-        return JSONResponse(
-            content={"status": "success", "message": "table_context metadata inserted successfully"},
-            status_code=200
-        )
-
-    elif request.metadata_type == "column":
-        try:
+        elif request.metadata_type == "column":
             data = JSONLoader(
                 file_path=db_column_path,
                 jq_schema='.[]',
                 text_content=False,
                 json_lines=False
             ).load()
-        except Exception as e:
-            raise HTTPException(
-                status_code=500,
-                detail=f"Error loading column metadata: {str(e)}"
-            )
     
-        for doc in data:
-            record = json.loads(doc.page_content)
-            record['data_source_id'] = project_id
-            record['data_namespace'] = dataset_id
-            postgres_vector_loader.insert_column_context(record, "column_context")
+            for doc in data:
+                record = json.loads(doc.page_content)
+                record['data_source_id'] = project_id
+                record['data_namespace'] = dataset_id
+                postgres_vector_loader.insert_column_context(record, "column_context")
+                
+            return JSONResponse(
+                content={"status": "success", "message": "column_context metadata inserted successfully"},
+                status_code=200
+            )
             
-        return JSONResponse(
-            content={"status": "success", "message": "column_context metadata inserted successfully"},
-            status_code=200
-        )
-        
-    else:
+        else:
+            raise HTTPException(
+                status_code=400,
+                detail="Invalid metadata_type. Must be 'table' or 'column'."
+            )
+            
+    except Exception as e:
+        logger.exception(f"Error in pg_vector_loader: {str(e)}")
         raise HTTPException(
-            status_code=400,
-            detail="Invalid metadata_type. Must be 'table' or 'column'."
+            status_code=500,
+            detail=f"Error processing {request.metadata_type} metadata: {str(e)}"
         )
 
 class Payload(BaseModel):
